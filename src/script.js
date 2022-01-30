@@ -1,5 +1,6 @@
 import './style.css'
 import * as THREE from 'three'
+import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls'
 
 /**
  * Base
@@ -9,8 +10,8 @@ const canvas = document.querySelector('canvas.webgl')
 
 // Sizes
 const sizes = {
-    width: 800,
-    height: 600
+    width: window.innerWidth,
+    height: window.innerHeight
 }
 
 // Scene
@@ -40,15 +41,21 @@ renderer.setSize(sizes.width, sizes.height)
 // Animate
 const clock = new THREE.Clock()
 
+// Controls
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+
+
 const tick = () =>
 {
     const elapsedTime = clock.getElapsedTime()
-
     // Update objects
     mesh.rotation.y = elapsedTime;
-
+    mesh.position.y = Math.sin(elapsedTime)
     // Render
     renderer.render(scene, camera)
+    // When using damping or similar, its a good idea to update the controls every tick
+    controls.update()
 
     // Call tick again on the next frame
     window.requestAnimationFrame(tick)
