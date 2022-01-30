@@ -1,6 +1,7 @@
 import './style.css'
 import * as THREE from 'three'
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls'
+import * as dat from 'lil-gui';
 
 /**
  * Base
@@ -17,27 +18,20 @@ const sizes = {
 // Scene
 const scene = new THREE.Scene()
 
-// Object
-// TIP: Geometries are often optimized if we store vertices in typed Arrays. In JS this looks like a float32Array.
-const BufferGeometry = new THREE.BufferGeometry();
-// Below we can fill our float array with random values.
-const count = 50;
-// this array is a fixed length array so we need to create it with enough values. In this case, count triangles, each with 3 verts, each vert with 3 ints.
-const positionsArray = new Float32Array( count * 3 * 3 );
-// then use a simple math random for loop to fill the array
-for(var i=0; i<count*3*3; i++) {
-    positionsArray[i] = Math.random() - 0.5
-}
-// Now we can create a Buffer Attribute using our typed Array ...... Note this second argument is how many attributes per vertex
-const positionsAttribute = new THREE.BufferAttribute(positionsArray, 3)
-BufferGeometry.setAttribute('position', positionsAttribute)
+
+
+// Mesh
 const mesh = new THREE.Mesh(
-    BufferGeometry,
+    new THREE.BoxGeometry(1,1,1),
     new THREE.MeshBasicMaterial({
         color: 0xff0000,
     wireframe: true })
 )
 scene.add(mesh)
+// debugger
+const gui = new dat.GUI()
+// add option to add control to gui. 1st param is target to manipulate. 2nd is string name of property to change.
+gui.add(mesh.position, 'y').min(-3).max(3).step(0.01);
 
 // Camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height)
@@ -89,7 +83,7 @@ const tick = () =>
     const elapsedTime = clock.getElapsedTime()
     // Update objects
     mesh.rotation.y = elapsedTime;
-    mesh.position.y = Math.sin(elapsedTime)
+    mesh.position.x = Math.sin(elapsedTime)
     // Render
     renderer.render(scene, camera)
     // When using damping or similar, its a good idea to update the controls every tick
