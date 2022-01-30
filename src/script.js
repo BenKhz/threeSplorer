@@ -20,12 +20,15 @@ const scene = new THREE.Scene()
 // Object
 // TIP: Geometries are often optimized if we store vertices in typed Arrays. In JS this looks like a float32Array.
 const BufferGeometry = new THREE.BufferGeometry();
-const positionsArray = new Float32Array([
-    1, 0, 0,
-    0, 1, 0,
-    0, 0, 1
-])
-// Now we can create a Buffer Attribute using our typed Array
+// Below we can fill our float array with random values.
+const count = 50;
+// this array is a fixed length array so we need to create it with enough values. In this case, count triangles, each with 3 verts, each vert with 3 ints.
+const positionsArray = new Float32Array( count * 3 * 3 );
+// then use a simple math random for loop to fill the array
+for(var i=0; i<count*3*3; i++) {
+    positionsArray[i] = Math.random() - 0.5
+}
+// Now we can create a Buffer Attribute using our typed Array ...... Note this second argument is how many attributes per vertex
 const positionsAttribute = new THREE.BufferAttribute(positionsArray, 3)
 BufferGeometry.setAttribute('position', positionsAttribute)
 const mesh = new THREE.Mesh(
