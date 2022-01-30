@@ -18,9 +18,21 @@ const sizes = {
 const scene = new THREE.Scene()
 
 // Object
+// TIP: Geometries are often optimized if we store vertices in typed Arrays. In JS this looks like a float32Array.
+const BufferGeometry = new THREE.BufferGeometry();
+const positionsArray = new Float32Array([
+    1, 0, 0,
+    0, 1, 0,
+    0, 0, 1
+])
+// Now we can create a Buffer Attribute using our typed Array
+const positionsAttribute = new THREE.BufferAttribute(positionsArray, 3)
+BufferGeometry.setAttribute('position', positionsAttribute)
 const mesh = new THREE.Mesh(
-    new THREE.BoxGeometry(1, 1, 1, 5, 5, 5),
-    new THREE.MeshBasicMaterial({ color: 0xff0000 })
+    BufferGeometry,
+    new THREE.MeshBasicMaterial({
+        color: 0xff0000,
+    wireframe: true })
 )
 scene.add(mesh)
 
@@ -61,6 +73,7 @@ window.addEventListener('resize', () => {
 })
 
 window.addEventListener('dblclick', ()=>{
+    const fullscreen = document.fullscreenElement || webkitFullScreenElement;
     if(!document.fullscreenElement) {
         canvas.requestFullscreen()
     } else {
