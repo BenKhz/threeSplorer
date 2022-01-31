@@ -49,6 +49,29 @@ const controls = new OrbitControls(camera, canvas)
 controls.enableDamping = true
 
 /**
+ * Objects
+ */
+const sphere = new THREE.Mesh(
+    new THREE.SphereGeometry(0.5,16,16),
+    new THREE.MeshBasicMaterial()
+)
+// const plane = new THREE.Mesh(
+//     new THREE.PlaneGeometry(2,2,6,6),
+//     new THREE.MeshBasicMaterial({color:0x332277, side: THREE.DoubleSide})
+// )
+const torus = new THREE.Mesh(
+    new THREE.TorusGeometry(3,0.2,3,3),
+    new THREE.MeshBasicMaterial({color:0xff5477, wireframe: false})
+)
+
+// plane.rotation.x = Math.PI /2;
+// plane.position.y = -0.5;
+
+// Adding a group
+const group = new THREE.Group();
+group.add( torus, sphere)
+scene.add(group)
+/**
  * Renderer
  */
 const renderer = new THREE.WebGLRenderer({
@@ -65,6 +88,9 @@ const clock = new THREE.Clock()
 const tick = () =>
 {
     const elapsedTime = clock.getElapsedTime()
+    torus.rotation.z += 0.005;
+    sphere.position.y = Math.sin(elapsedTime)
+    group.rotation.y +=0.005
 
     // Update controls
     controls.update()
